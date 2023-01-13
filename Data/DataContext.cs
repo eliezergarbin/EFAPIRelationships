@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EFAPIRelationships.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace EFAPIRelationships.Data
 {
@@ -8,6 +9,9 @@ namespace EFAPIRelationships.Data
         {
 
         }
+        
+        public DbSet<User> Users { get; set; }
+        public DbSet<Character> Characters { get; set; }
 
     }
 }
