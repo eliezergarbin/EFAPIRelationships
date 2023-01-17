@@ -1,4 +1,5 @@
 ﻿using EFAPIRelationships.Data;
+using EFAPIRelationships.DTO;
 using EFAPIRelationships.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,12 +26,23 @@ namespace EFAPIRelationships.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<Character>>> Create(Character character)
+        public async Task<ActionResult<List<Character>>> Create(CreateCharacterDTO request)
         {
-            _context.Characters.Add(character);
+            var user = await _context.Users.FindAsync(request.UserId);
+            if (user == null)
+                return NotFound();
+
+            var newCharacter = new Character
+            {
+                Name = request.Name,
+                PublishedBy = request.PublishedBy,
+                User = user
+            };
+
+            _context.Characters.Add(newCharacter);
             await _context.SaveChangesAsync();
 
-            return await Get(character.UserId);
+            return await Get(newCharacter.UserId);
         }
     }
 }
