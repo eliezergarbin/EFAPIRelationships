@@ -1,4 +1,6 @@
-﻿namespace EFAPIRelationships.Models
+﻿using System.Text.Json.Serialization;
+
+namespace EFAPIRelationships.Models
 {
     public class Weapon
     {
@@ -6,6 +8,7 @@
         public string Name { get; set; }
         public int Damage { get; set; }
 
+        [JsonIgnore]
         public Character Character { get; set; }
         public int CharacterId { get; set; }
     }
