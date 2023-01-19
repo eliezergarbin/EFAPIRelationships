@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Reflection.Metadata.Ecma335;
+using System.Text.Json.Serialization;
 
 namespace EFAPIRelationships.Models
 {
@@ -13,5 +14,6 @@ namespace EFAPIRelationships.Models
         public int UserId { get; set; }
 
         public Weapon Weapon { get; set; }
+        public List<Skill> Skills { get; set; }
     }
 }
