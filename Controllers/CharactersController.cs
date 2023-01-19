@@ -3,6 +3,8 @@ using EFAPIRelationships.DTO;
 using EFAPIRelationships.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata.Ecma335;
+using System.Runtime.CompilerServices;
 
 namespace EFAPIRelationships.Controllers
 {
@@ -23,6 +25,7 @@ namespace EFAPIRelationships.Controllers
             var characters = await _context.Characters
                 .Where(x => x.UserId == userId)
                 .Include(x => x.Weapon)
+                .Include(x => x.Skills)
                 .ToListAsync();
 
             return characters;
@@ -67,5 +70,26 @@ namespace EFAPIRelationships.Controllers
 
             return character;
         }
+
+        [HttpPost("skill")]
+        public async Task<ActionResult<Character>> AddCharacterSkill(AddCharacterSkillDTO request) 
+        {
+            var character = await _context.Characters
+                .Where(c => c.Id == request.CharacterId)
+                .Include(c => c.Skills)
+                .FirstOrDefaultAsync();
+
+            if (character == null) return NotFound();
+
+            var skill = await _context.Skills.FindAsync(request.SkillId);
+            if (skill == null) return NotFound();
+
+            character.Skills.Add(skill);
+            await _context.SaveChangesAsync();
+
+            return character;
+        }
+
+
     }
 }
